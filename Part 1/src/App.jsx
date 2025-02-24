@@ -22,8 +22,7 @@ const Content = (props) => {
   
 }
 
-
-const Total = (props) => {
+const TotalEjercicios = (props) => {
 
 
   return <div> <br /> <p>Number of exercises: {props.ejercicios.parts[0].exercises + props.ejercicios.parts[1].exercises + props.ejercicios.parts[2].exercises}</p></div>
@@ -36,9 +35,47 @@ const App = () => {
     parts:  [{name:'Fundamentals of React', exercises: 10 },{name:'Using props to pass data', exercises: 7},{name:'State of a component', exercises: 14}]
   }
 
-    const [good, setGood] = useState(0)
-    const [neutral, setNeutral] = useState(0)
-    const [bad, setBad] = useState(0)
+    const [comments, setComments] = useState({
+      good: 0,
+      bad: 0,
+      neutral:0,
+    });
+ 
+    const [total, setTotal] = useState([])
+
+
+    const clicsGood = () =>{
+      const newComments = {
+        ...comments,
+        good: comments.good + 1,
+      }
+      setComments(newComments);
+      setTotal((prevTotal)=>[...prevTotal, 'G']);
+    };
+    const clicsBad = () =>{
+      const newComments = {
+        ...comments,
+        bad: comments.bad + 1,
+      }
+      setComments(newComments);
+      setTotal((prevTotal)=>[...prevTotal, 'B']);
+    }
+    const clicsNeutral = () =>{
+      const newComments = {
+        ...comments,
+        neutral: comments.neutral + 1,
+      }
+      setComments(newComments);
+      setTotal((prevTotal)=>[...prevTotal, 'N']);
+    }
+
+    const resultG = total.filter((word) => word === 'G');
+    const resultB = total.filter((word) => word ==='B');
+    const promedio = ((resultG.length*1)+(resultB.length*(-1)))/total.length;
+    const positivo = (resultG.length/total.length)*100;
+
+  
+
   return (
     <div>
     <h1>Ejercicios Part 1</h1>
@@ -48,22 +85,28 @@ const App = () => {
 
       <Content partes ={course}></Content>  
       
-      <Total ejercicios={course}></Total>
+      <TotalEjercicios ejercicios={course}></TotalEjercicios>
 
+      <br />
     <h2>Ejercicios 1.6. - 1.14.</h2>
-     
+    
     <div>
       <h2>Give FeedBack</h2>
 
-      <button onClick={()=>setGood(good + 1)}>good</button>
-      <button onClick={()=>setNeutral(neutral + 1)}>neutral</button>
-      <button onClick={()=>setBad(bad + 1)}>Bad</button>
+      <button onClick={clicsGood}>good</button>
+      <button onClick={clicsNeutral}>neutral</button>
+      <button onClick={clicsBad}>Bad</button>
+      <br />
 
       <h2>Statistics</h2>
 
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
+      <p>Good: {comments.good} </p>
+      <p>Neutral: {comments.neutral} </p>
+      <p>Bad: {comments.bad} </p>
+      <p>Total: {total.length}</p>
+      <p>Promedio: {promedio}</p>
+      <p>Positivo: {positivo} %</p>
+
 
 
     </div>
